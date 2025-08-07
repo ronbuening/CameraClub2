@@ -17,9 +17,9 @@ namespace CameraClub2.Services
             return await _context.Clubs.Include(c => c.Members).ToListAsync();
         }
 
-        public async Task<Club?> GetClubAsync(int id)
+        public async Task<Club?> GetClubAsync(Guid id)
         {
-            return await _context.Clubs.Include(c => c.Members).FirstOrDefaultAsync(c => c.ClubID == id);
+            return await _context.Clubs.Include(c => c.Members).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Club> CreateClubAsync(Club club)
@@ -35,7 +35,7 @@ namespace CameraClub2.Services
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DeleteClubAsync(int id)
+        public async Task<bool> DeleteClubAsync(Guid id)
         {
             var club = await _context.Clubs.FindAsync(id);
             if (club == null) return false;

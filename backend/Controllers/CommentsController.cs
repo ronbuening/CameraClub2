@@ -14,6 +14,10 @@ namespace CameraClub2.Controllers
             _commentService = commentService;
         }
 
+        /// <summary>
+        /// Gets all comments in the system.
+        /// </summary>
+        /// <returns>List of all comments.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
@@ -21,11 +25,16 @@ namespace CameraClub2.Controllers
             return Ok(comments);
         }
 
+        /// <summary>
+        /// Adds a new comment to a submission.
+        /// </summary>
+        /// <param name="comment">Comment object to add.</param>
+        /// <returns>The created comment.</returns>
         [HttpPost]
         public async Task<ActionResult<Comment>> AddComment(Comment comment)
         {
             var added = await _commentService.AddCommentAsync(comment);
-            return CreatedAtAction(nameof(GetComments), new { id = added.CommentID }, added);
+            return CreatedAtAction(nameof(GetComments), new { id = added.Id }, added);
         }
     }
 }

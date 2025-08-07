@@ -17,7 +17,7 @@ namespace CameraClub2.Services
             return await _context.Users.Include(u => u.ClubMemberships).Include(u => u.EquipmentList).ToListAsync();
         }
 
-        public async Task<User?> GetUserAsync(string id)
+        public async Task<User?> GetUserAsync(Guid id)
         {
             return await _context.Users.Include(u => u.ClubMemberships).Include(u => u.EquipmentList).FirstOrDefaultAsync(u => u.Id == id);
         }

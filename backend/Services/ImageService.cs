@@ -17,9 +17,9 @@ namespace CameraClub2.Services
             return await _context.Images.Include(i => i.Comments).Include(i => i.Ratings).ToListAsync();
         }
 
-        public async Task<Image?> GetImageAsync(int id)
+        public async Task<Image?> GetImageAsync(Guid id)
         {
-            return await _context.Images.Include(i => i.Comments).Include(i => i.Ratings).FirstOrDefaultAsync(i => i.ImageID == id);
+            return await _context.Images.Include(i => i.Comments).Include(i => i.Ratings).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Image> UploadImageAsync(Image image)
@@ -29,7 +29,7 @@ namespace CameraClub2.Services
             return image;
         }
 
-        public async Task<bool> DeleteImageAsync(int id)
+        public async Task<bool> DeleteImageAsync(Guid id)
         {
             var image = await _context.Images.FindAsync(id);
             if (image == null) return false;

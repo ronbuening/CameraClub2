@@ -14,6 +14,10 @@ namespace CameraClub2.Controllers
             _judgingAssignmentService = judgingAssignmentService;
         }
 
+        /// <summary>
+        /// Gets all judging assignments in the system.
+        /// </summary>
+        /// <returns>List of all judging assignments.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JudgingAssignment>>> GetJudgingAssignments()
         {
@@ -21,11 +25,16 @@ namespace CameraClub2.Controllers
             return Ok(assignments);
         }
 
+        /// <summary>
+        /// Adds a new judging assignment.
+        /// </summary>
+        /// <param name="assignment">JudgingAssignment object to add.</param>
+        /// <returns>The created judging assignment.</returns>
         [HttpPost]
         public async Task<ActionResult<JudgingAssignment>> AddJudgingAssignment(JudgingAssignment assignment)
         {
             var added = await _judgingAssignmentService.AddJudgingAssignmentAsync(assignment);
-            return CreatedAtAction(nameof(GetJudgingAssignments), new { id = added.JudgingAssignmentID }, added);
+            return CreatedAtAction(nameof(GetJudgingAssignments), new { id = added.Id }, added);
         }
     }
 }

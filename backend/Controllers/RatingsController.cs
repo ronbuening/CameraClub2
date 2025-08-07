@@ -14,6 +14,10 @@ namespace CameraClub2.Controllers
             _ratingService = ratingService;
         }
 
+        /// <summary>
+        /// Gets all ratings in the system.
+        /// </summary>
+        /// <returns>List of all ratings.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
         {
@@ -21,11 +25,16 @@ namespace CameraClub2.Controllers
             return Ok(ratings);
         }
 
+        /// <summary>
+        /// Adds a new rating to a submission.
+        /// </summary>
+        /// <param name="rating">Rating object to add.</param>
+        /// <returns>The created rating.</returns>
         [HttpPost]
         public async Task<ActionResult<Rating>> AddRating(Rating rating)
         {
             var added = await _ratingService.AddRatingAsync(rating);
-            return CreatedAtAction(nameof(GetRatings), new { id = added.RatingID }, added);
+            return CreatedAtAction(nameof(GetRatings), new { id = added.Id }, added);
         }
     }
 }

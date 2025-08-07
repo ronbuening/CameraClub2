@@ -14,6 +14,10 @@ namespace CameraClub2.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Gets all users in the system.
+        /// </summary>
+        /// <returns>List of all users.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -21,8 +25,13 @@ namespace CameraClub2.Controllers
             return Ok(users);
         }
 
+        /// <summary>
+        /// Gets a specific user by their unique identifier.
+        /// </summary>
+        /// <param name="id">User Guid identifier.</param>
+        /// <returns>The user if found, otherwise NotFound.</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _userService.GetUserAsync(id);
             if (user == null) return NotFound();

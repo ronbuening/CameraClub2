@@ -17,9 +17,9 @@ namespace CameraClub2.Services
             return await _context.Competitions.Include(c => c.Submissions).ToListAsync();
         }
 
-        public async Task<Competition?> GetCompetitionAsync(int id)
+        public async Task<Competition?> GetCompetitionAsync(Guid id)
         {
-            return await _context.Competitions.Include(c => c.Submissions).FirstOrDefaultAsync(c => c.CompetitionID == id);
+            return await _context.Competitions.Include(c => c.Submissions).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Competition> CreateCompetitionAsync(Competition competition)
@@ -35,7 +35,7 @@ namespace CameraClub2.Services
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> DeleteCompetitionAsync(int id)
+        public async Task<bool> DeleteCompetitionAsync(Guid id)
         {
             var competition = await _context.Competitions.FindAsync(id);
             if (competition == null) return false;

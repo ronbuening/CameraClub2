@@ -6,8 +6,8 @@ namespace CameraClub2.Models
 {
     public class Competition
     {
-        public int CompetitionID { get; set; }
-        public int ClubID { get; set; }
+        public Guid Id { get; set; }
+        public Guid ClubId { get; set; }
         public Club? Club { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Theme { get; set; }
@@ -21,5 +21,12 @@ namespace CameraClub2.Models
         public DateTime PublicEnd { get; set; }
         public ICollection<Submission>? Submissions { get; set; }
         public ICollection<JudgingAssignment>? JudgingAssignments { get; set; }
+
+        public Competition()
+        {
+            Id = Guid.NewGuid();
+            Submissions = new List<Submission>();
+            JudgingAssignments = new List<JudgingAssignment>();
+        }
     }
 }

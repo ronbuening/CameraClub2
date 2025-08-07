@@ -5,12 +5,17 @@ namespace CameraClub2.Models
 {
     public class JudgingAssignment
     {
-        public int JudgingAssignmentID { get; set; }
-        public int CompetitionID { get; set; }
+        public Guid Id { get; set; }
+        public Guid CompetitionId { get; set; }
         public Competition? Competition { get; set; }
-        public string JudgeUserID { get; set; } = string.Empty;
+        public Guid JudgeUserId { get; set; }
         public User? Judge { get; set; }
-        public string Status { get; set; } = "Assigned"; // Assigned, Completed
+        public string Status { get; set; } = "Assigned";
         public DateTime AssignedAt { get; set; }
+
+        public JudgingAssignment()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }
