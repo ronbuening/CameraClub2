@@ -12,11 +12,17 @@ namespace CameraClub2.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all comments from the database.
+        /// </summary>
         public async Task<IEnumerable<Comment>> GetCommentsAsync()
         {
             return await _context.Comments.ToListAsync();
         }
 
+        /// <summary>
+        /// Adds a new comment to the database.
+        /// </summary>
         public async Task<Comment> AddCommentAsync(Comment comment)
         {
             _context.Comments.Add(comment);

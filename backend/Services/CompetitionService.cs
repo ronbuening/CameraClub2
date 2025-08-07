@@ -12,16 +12,25 @@ namespace CameraClub2.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all competitions from the database.
+        /// </summary>
         public async Task<IEnumerable<Competition>> GetCompetitionsAsync()
         {
             return await _context.Competitions.Include(c => c.Submissions).ToListAsync();
         }
 
+        /// <summary>
+        /// Retrieves a specific competition by its Guid identifier.
+        /// </summary>
         public async Task<Competition?> GetCompetitionAsync(Guid id)
         {
             return await _context.Competitions.Include(c => c.Submissions).FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        /// <summary>
+        /// Creates a new competition in the database.
+        /// </summary>
         public async Task<Competition> CreateCompetitionAsync(Competition competition)
         {
             _context.Competitions.Add(competition);
@@ -29,12 +38,18 @@ namespace CameraClub2.Services
             return competition;
         }
 
+        /// <summary>
+        /// Updates an existing competition in the database.
+        /// </summary>
         public async Task<bool> UpdateCompetitionAsync(Competition competition)
         {
             _context.Entry(competition).State = EntityState.Modified;
             return await _context.SaveChangesAsync() > 0;
         }
 
+        /// <summary>
+        /// Deletes a competition by its Guid identifier.
+        /// </summary>
         public async Task<bool> DeleteCompetitionAsync(Guid id)
         {
             var competition = await _context.Competitions.FindAsync(id);

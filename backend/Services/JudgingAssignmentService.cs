@@ -12,11 +12,17 @@ namespace CameraClub2.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all judging assignments from the database.
+        /// </summary>
         public async Task<IEnumerable<JudgingAssignment>> GetJudgingAssignmentsAsync()
         {
             return await _context.JudgingAssignments.ToListAsync();
         }
 
+        /// <summary>
+        /// Adds a new judging assignment to the database.
+        /// </summary>
         public async Task<JudgingAssignment> AddJudgingAssignmentAsync(JudgingAssignment assignment)
         {
             _context.JudgingAssignments.Add(assignment);

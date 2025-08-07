@@ -12,11 +12,17 @@ namespace CameraClub2.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all users from the database.
+        /// </summary>
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _context.Users.Include(u => u.ClubMemberships).Include(u => u.EquipmentList).ToListAsync();
         }
 
+        /// <summary>
+        /// Retrieves a specific user by their Guid identifier.
+        /// </summary>
         public async Task<User?> GetUserAsync(Guid id)
         {
             return await _context.Users.Include(u => u.ClubMemberships).Include(u => u.EquipmentList).FirstOrDefaultAsync(u => u.Id == id);

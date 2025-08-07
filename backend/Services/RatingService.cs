@@ -12,11 +12,17 @@ namespace CameraClub2.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all ratings from the database.
+        /// </summary>
         public async Task<IEnumerable<Rating>> GetRatingsAsync()
         {
             return await _context.Ratings.ToListAsync();
         }
 
+        /// <summary>
+        /// Adds a new rating to the database.
+        /// </summary>
         public async Task<Rating> AddRatingAsync(Rating rating)
         {
             _context.Ratings.Add(rating);
