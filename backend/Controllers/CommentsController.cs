@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CameraClub2.Models;
+using CameraClub2.Interfaces;
 
 namespace CameraClub2.Controllers
 {
@@ -8,24 +8,24 @@ namespace CameraClub2.Controllers
     [Route("api/[controller]")]
     public class CommentsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public CommentsController(AppDbContext context)
+        private readonly ICommentService _commentService;
+        public CommentsController(ICommentService commentService)
         {
-            _context = context;
+            _commentService = commentService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
-            return await _context.Comments.ToListAsync();
+            var comments = await _commentService.GetCommentsAsync();
+            return Ok(comments);
         }
 
         [HttpPost]
         public async Task<ActionResult<Comment>> AddComment(Comment comment)
         {
-            _context.Comments.Add(comment);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetComments), new { id = comment.CommentID }, comment);
+            var added = await _commentService.AddCommentAsync(comment);
+            return CreatedAtAction(nameof(GetComments), new { id = added.CommentID }, added);
         }
     }
 }

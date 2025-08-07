@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CameraClub2.Models;
+using CameraClub2.Interfaces;
 
 namespace CameraClub2.Controllers
 {
@@ -8,50 +8,48 @@ namespace CameraClub2.Controllers
     [Route("api/[controller]")]
     public class ClubsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ClubsController(AppDbContext context)
+        private readonly IClubService _clubService;
+        public ClubsController(IClubService clubService)
         {
-            _context = context;
+            _clubService = clubService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Club>>> GetClubs()
         {
-            return await _context.Clubs.Include(c => c.Members).ToListAsync();
+            var clubs = await _clubService.GetClubsAsync();
+            return Ok(clubs);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Club>> GetClub(int id)
         {
-            var club = await _context.Clubs.Include(c => c.Members).FirstOrDefaultAsync(c => c.ClubID == id);
+            var club = await _clubService.GetClubAsync(id);
             if (club == null) return NotFound();
-            return club;
+            return Ok(club);
         }
 
         [HttpPost]
         public async Task<ActionResult<Club>> CreateClub(Club club)
         {
-            _context.Clubs.Add(club);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetClub), new { id = club.ClubID }, club);
+            var created = await _clubService.CreateClubAsync(club);
+            return CreatedAtAction(nameof(GetClub), new { id = created.ClubID }, created);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClub(int id, Club club)
         {
             if (id != club.ClubID) return BadRequest();
-            _context.Entry(club).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var success = await _clubService.UpdateClubAsync(club);
+            if (!success) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClub(int id)
         {
-            var club = await _context.Clubs.FindAsync(id);
-            if (club == null) return NotFound();
-            _context.Clubs.Remove(club);
-            await _context.SaveChangesAsync();
+            var success = await _clubService.DeleteClubAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
     }

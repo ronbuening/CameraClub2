@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CameraClub2.Models;
+using CameraClub2.Interfaces;
 
 namespace CameraClub2.Controllers
 {
@@ -8,24 +8,24 @@ namespace CameraClub2.Controllers
     [Route("api/[controller]")]
     public class JudgingAssignmentsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public JudgingAssignmentsController(AppDbContext context)
+        private readonly IJudgingAssignmentService _judgingAssignmentService;
+        public JudgingAssignmentsController(IJudgingAssignmentService judgingAssignmentService)
         {
-            _context = context;
+            _judgingAssignmentService = judgingAssignmentService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JudgingAssignment>>> GetJudgingAssignments()
         {
-            return await _context.JudgingAssignments.ToListAsync();
+            var assignments = await _judgingAssignmentService.GetJudgingAssignmentsAsync();
+            return Ok(assignments);
         }
 
         [HttpPost]
         public async Task<ActionResult<JudgingAssignment>> AddJudgingAssignment(JudgingAssignment assignment)
         {
-            _context.JudgingAssignments.Add(assignment);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetJudgingAssignments), new { id = assignment.JudgingAssignmentID }, assignment);
+            var added = await _judgingAssignmentService.AddJudgingAssignmentAsync(assignment);
+            return CreatedAtAction(nameof(GetJudgingAssignments), new { id = added.JudgingAssignmentID }, added);
         }
     }
 }

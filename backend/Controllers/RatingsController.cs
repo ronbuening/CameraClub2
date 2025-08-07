@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CameraClub2.Models;
+using CameraClub2.Interfaces;
 
 namespace CameraClub2.Controllers
 {
@@ -8,24 +8,24 @@ namespace CameraClub2.Controllers
     [Route("api/[controller]")]
     public class RatingsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public RatingsController(AppDbContext context)
+        private readonly IRatingService _ratingService;
+        public RatingsController(IRatingService ratingService)
         {
-            _context = context;
+            _ratingService = ratingService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
         {
-            return await _context.Ratings.ToListAsync();
+            var ratings = await _ratingService.GetRatingsAsync();
+            return Ok(ratings);
         }
 
         [HttpPost]
         public async Task<ActionResult<Rating>> AddRating(Rating rating)
         {
-            _context.Ratings.Add(rating);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetRatings), new { id = rating.RatingID }, rating);
+            var added = await _ratingService.AddRatingAsync(rating);
+            return CreatedAtAction(nameof(GetRatings), new { id = added.RatingID }, added);
         }
     }
 }

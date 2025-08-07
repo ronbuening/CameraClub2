@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CameraClub2.Models;
+using CameraClub2.Interfaces;
 
 namespace CameraClub2.Controllers
 {
@@ -8,50 +8,48 @@ namespace CameraClub2.Controllers
     [Route("api/[controller]")]
     public class CompetitionsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public CompetitionsController(AppDbContext context)
+        private readonly ICompetitionService _competitionService;
+        public CompetitionsController(ICompetitionService competitionService)
         {
-            _context = context;
+            _competitionService = competitionService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitions()
         {
-            return await _context.Competitions.Include(c => c.Submissions).ToListAsync();
+            var competitions = await _competitionService.GetCompetitionsAsync();
+            return Ok(competitions);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Competition>> GetCompetition(int id)
         {
-            var competition = await _context.Competitions.Include(c => c.Submissions).FirstOrDefaultAsync(c => c.CompetitionID == id);
+            var competition = await _competitionService.GetCompetitionAsync(id);
             if (competition == null) return NotFound();
-            return competition;
+            return Ok(competition);
         }
 
         [HttpPost]
         public async Task<ActionResult<Competition>> CreateCompetition(Competition competition)
         {
-            _context.Competitions.Add(competition);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCompetition), new { id = competition.CompetitionID }, competition);
+            var created = await _competitionService.CreateCompetitionAsync(competition);
+            return CreatedAtAction(nameof(GetCompetition), new { id = created.CompetitionID }, created);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCompetition(int id, Competition competition)
         {
             if (id != competition.CompetitionID) return BadRequest();
-            _context.Entry(competition).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var success = await _competitionService.UpdateCompetitionAsync(competition);
+            if (!success) return NotFound();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompetition(int id)
         {
-            var competition = await _context.Competitions.FindAsync(id);
-            if (competition == null) return NotFound();
-            _context.Competitions.Remove(competition);
-            await _context.SaveChangesAsync();
+            var success = await _competitionService.DeleteCompetitionAsync(id);
+            if (!success) return NotFound();
             return NoContent();
         }
     }

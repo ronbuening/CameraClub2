@@ -1,4 +1,6 @@
 using CameraClub2.Models;
+using CameraClub2.Services;
+using CameraClub2.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,15 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register services for DI
+builder.Services.AddScoped<IClubService, ClubService>();
+builder.Services.AddScoped<ICompetitionService, CompetitionService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IJudgingAssignmentService, JudgingAssignmentService>();
 
 // Configure EF Core with SQL Server (update connection string as needed)
 builder.Services.AddDbContext<AppDbContext>(options =>
