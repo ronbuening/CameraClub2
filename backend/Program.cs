@@ -2,6 +2,8 @@ using CameraClub2.Models;
 using CameraClub2.Services;
 using CameraClub2.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Sinks.File;
 
 var builder = WebApplication.CreateBuilder(args);
 

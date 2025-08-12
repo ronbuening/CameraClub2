@@ -6,12 +6,16 @@ using CameraClub2.Services;
 
 namespace CameraClub2.Models
 {
-    public class User : IdentityUser<Guid>
+    public class User 
     {
+        /// <summary>
+        /// Gets or sets the unique identifier for the user.
+        /// </summary>
+        public Guid UserId { get; set; }
         /// <summary>
         /// Gets or sets the display name of the user.
         /// </summary>
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets the avatar URL of the user.
@@ -26,12 +30,12 @@ namespace CameraClub2.Models
         /// <summary>
         /// Gets or sets the email of the user.
         /// </summary>
-        public new string Email { get; set; } = string.Empty;
+        public string Email { get; set; }
 
         /// <summary>
         /// Gets or sets the password of the user.
         /// </summary>
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets or sets the club memberships associated with the user.
@@ -61,19 +65,15 @@ namespace CameraClub2.Models
         /// <summary>
         /// Initializes a new instance of the User class and sets default values for collections.
         /// </summary>
-        public User()
+        public User() { }
+    
+        public User(CUser _cUser, string _hashedPassword)
         {
-            ClubMemberships = new List<ClubMembership>();
-            EquipmentList = new List<Equipment>();
-            Comments = new List<Comment>();
-            Uploads = new List<Image>();
-            JudgingAssignments = new List<JudgingAssignment>();
+            UserId = Guid.NewGuid();
+            DisplayName = _cUser.DisplayName;
+            Email = _cUser.Email;
+            Password = _hashedPassword;
         }
-        public User(string email, string password)
-        {
-            Email = email;
-            Password = await UserService.HashPassword(password);
-            Id = Guid.NewGuid();
-        }
+
     }
 }
