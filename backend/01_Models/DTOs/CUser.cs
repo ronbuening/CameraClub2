@@ -14,6 +14,8 @@ namespace CameraClub2.Models
         /// <summary>
         /// Gets or sets the email address of the user.
         /// </summary>
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
         /// <summary>
         /// Gets or sets the password of the user.

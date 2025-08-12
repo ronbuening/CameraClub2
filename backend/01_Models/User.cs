@@ -30,6 +30,8 @@ namespace CameraClub2.Models
         /// <summary>
         /// Gets or sets the email of the user.
         /// </summary>
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>
