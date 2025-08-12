@@ -27,5 +27,10 @@ namespace CameraClub2.Services
         {
             return await _context.Users.Include(u => u.ClubMemberships).Include(u => u.EquipmentList).FirstOrDefaultAsync(u => u.Id == id);
         }
+        public async Task<string> HashPassword(string password)
+        {
+            // Implement password hashing logic here
+            return await password; // Placeholder, replace with actual hashing
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using CameraClub2.Models;
+using CameraClub2.Services;
 
 namespace CameraClub2.Models
 {
@@ -67,6 +68,12 @@ namespace CameraClub2.Models
             Comments = new List<Comment>();
             Uploads = new List<Image>();
             JudgingAssignments = new List<JudgingAssignment>();
+        }
+        public User(string email, string password)
+        {
+            Email = email;
+            Password = await UserService.HashPassword(password);
+            Id = Guid.NewGuid();
         }
     }
 }
